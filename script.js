@@ -7,49 +7,48 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearBtn = document.querySelector('.Clear');
 
     function toggleUnits() {
-        if (unitSelector.value === 'metric') {
-            metricUnits.style.display = 'flex';
-            usUnits.style.display = 'none';
-        } else {
-            metricUnits.style.display = 'none';
-            usUnits.style.display = 'flex';
-        }
+        const isMetric = unitSelector.value === 'metric';
+        metricUnits.style.display = isMetric ? 'flex' : 'none';
+        usUnits.style.display = isMetric ? 'none' : 'flex';
         clearFields();
     }
 
     function calculateBMI() {
-        let weight, height, bmi;
-        const isMetric = unitSelector.value === 'metric';
-        
-        if (isMetric) {
-            weight = parseFloat(document.getElementById('weight-metric').value);
-            height = parseFloat(document.getElementById('height-metric').value) / 100;
-        } else {
-            weight = parseFloat(document.getElementById('weight-us').value) * 0.453592;
-            height = parseFloat(document.getElementById('height-us').value) * 0.0254;
-        }
+        try {
+            const isMetric = unitSelector.value === 'metric';
+            const weight = parseFloat(document.getElementById(isMetric ? 'weight-metric' : 'weight-us').value);
+            const height = parseFloat(document.getElementById(isMetric ? 'height-metric' : 'height-us').value);
 
-        if (!weight || !height || weight <= 0 || height <= 0) {
-            alert('Please enter valid weight and height values');
-            return;
-        }
+            if (!weight || !height || isNaN(weight) || isNaN(height)) {
+                throw new Error('Please enter valid numbers for weight and height');
+            }
 
-        bmi = weight / (height * height);
-        const category = getBMICategory(bmi);
-        const recommendation = getRecommendation()[category];
-        
-        resultBox.innerHTML = `
-            <h3>Your Results</h3>
-            <p>Your BMI: ${bmi.toFixed(1)}</p>
-            <p>Category: ${category}</p>
-            <div class="recommendation">
-                <h4>${recommendation.title}</h4>
-                <ul>
-                    ${recommendation.tips.map(tip => `<li>${tip}</li>`).join('')}
-                </ul>
-            </div>
-        `;
-        resultBox.classList.add('result-visible');
+            let bmi;
+            if (isMetric) {
+                if (weight < 20 || weight > 300) {
+                    throw new Error('Weight must be between 20kg and 300kg');
+                }
+                if (height < 50 || height > 250) {
+                    throw new Error('Height must be between 50cm and 250cm');
+                }
+                bmi = weight / Math.pow(height / 100, 2);
+            } else {
+                if (weight < 44 || weight > 660) {
+                    throw new Error('Weight must be between 44lbs and 660lbs');
+                }
+                if (height < 20 || height > 98) {
+                    throw new Error('Height must be between 20 and 98 inches');
+                }
+                bmi = (weight * 703) / Math.pow(height, 2);
+            }
+
+            const category = getBMICategory(bmi);
+            const explanation = getCategoryExplanation(category);
+            displayResult(bmi, category, explanation);
+
+        } catch (error) {
+            displayError(error.message);
+        }
     }
 
     function getBMICategory(bmi) {
@@ -63,79 +62,84 @@ document.addEventListener('DOMContentLoaded', function() {
         return 'Obese Class III';
     }
 
-    function getRecommendation() {
-        return {
+    function getCategoryExplanation(category) {
+        const explanations = {
             'Severe Thinness': {
-                title: 'Recommendation for Severe Thinness',
-                tips: [
-                    'Eat foods with enough energy to help you gain weight',
-                    'Include protein-rich foods to build muscles',
-                    'Ensure adequate vitamins and minerals intake'
-                ]
+                description: 'This indicates severely low body weight that requires immediate medical attention.',
+                risks: 'High risk of health complications including malnutrition and weakened immune system.',
+                recommendation: 'Seek immediate medical consultation and work with healthcare professionals for a safe weight gain plan.'
             },
             'Moderate Thinness': {
-                title: 'Recommendation for Moderate Thinness',
-                tips: [
-                    'Increase calorie intake with nutrient-dense foods',
-                    'Include strength training exercises',
-                    'Consult a nutritionist for a personalized meal plan'
-                ]
+                description: 'Your body weight is significantly below the healthy range.',
+                risks: 'Increased risk of nutritional deficiencies and reduced physical strength.',
+                recommendation: 'Consult a healthcare provider and focus on healthy weight gain through balanced nutrition.'
             },
             'Mild Thinness': {
-                title: 'Recommendation for Mild Thinness',
-                tips: [
-                    'Focus on balanced diet with slight calorie surplus',
-                    'Regular physical activity',
-                    'Monitor weight gain progress'
-                ]
+                description: 'Your weight is slightly below the healthy range.',
+                risks: 'Potential for reduced energy levels and nutritional gaps.',
+                recommendation: 'Work on gradually increasing caloric intake with nutrient-rich foods.'
             },
             'Normal': {
-                title: 'Maintaining Healthy Weight',
-                tips: [
-                    'Maintain balanced diet and regular exercise <i class="fa-solid fa-dumbbell"></i>',
-                    'Regular health check-ups <i class="fa-solid fa-notes-medical"></i>',
-                    'Stay hydrated and active <i class="fa-solid fa-bottle-water"></i>'
-                ]
+                description: 'Your weight is within the healthy range for your height.',
+                risks: 'Maintain this healthy weight range to minimize health risks.',
+                recommendation: 'Continue balanced diet and regular physical activity.'
             },
             'Overweight': {
-                title: 'Weight Management Tips',
-                tips: [
-                    'Create a moderate calorie deficit',
-                    'Increase physical activity <i class="fa-solid fa-dumbbell"></i>',
-                    'Choose whole, nutrient-dense foods'
-                ]
+                description: 'Your weight is above the recommended healthy range.',
+                risks: 'Increased risk of cardiovascular issues and other health conditions.',
+                recommendation: 'Focus on gradual weight loss through healthy diet and regular exercise.'
             },
             'Obese Class I': {
-                title: 'Weight Loss Recommendations',
-                tips: [
-                    'Consult healthcare provider',
-                    'Create structured meal plan',
-                    'Regular exercise routine <i class="fa-solid fa-dumbbell"></i>'
-                ]
+                description: 'Your weight significantly exceeds the healthy range.',
+                risks: 'High risk of various health complications including diabetes and heart disease.',
+                recommendation: 'Consult healthcare providers for a structured weight loss program.'
             },
             'Obese Class II': {
-                title: 'Medical Weight Management',
-                tips: [
-                    'Seek medical supervision',
-                    'Consider behavioral therapy',
-                    'Structured exercise program'
-                ]
+                description: 'Your weight is at a severe level above the healthy range.',
+                risks: 'Serious health risks including cardiovascular disease and mobility issues.',
+                recommendation: 'Seek professional medical guidance for weight management.'
             },
             'Obese Class III': {
-                title: 'Comprehensive Weight Management',
-                tips: [
-                    'Work with healthcare team',
-                    'Consider medical interventions',
-                    'Regular monitoring and support'
-                ]
+                description: 'Your weight is at a very severe level requiring immediate attention.',
+                risks: 'Critical health risks requiring immediate medical intervention.',
+                recommendation: 'Urgent medical consultation and supervised weight management required.'
             }
         };
+        return explanations[category];
+    }
+
+    function displayResult(bmi, category, explanation) {
+        resultBox.innerHTML = `
+            <h3><i class="fas fa-calculator"></i> Your Results</h3>
+            <p><i class="fas fa-weight"></i> BMI: ${bmi.toFixed(1)}</p>
+            <p><i class="fas fa-chart-line"></i> Category: ${category}</p>
+            <div class="category-details">
+                <p><i class="fas fa-info-circle"></i> ${explanation.description}</p>
+                <div class="details-section">
+                    <p><i class="fas fa-exclamation-triangle"></i> ${explanation.risks}</p>
+                    <p><i class="fas fa-lightbulb"></i> ${explanation.recommendation}</p>
+                </div>
+            </div>
+        `;
+        resultBox.classList.remove('error');
+        resultBox.classList.add('result-visible');
+    }
+
+    function displayError(message) {
+        resultBox.innerHTML = `
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>${message}</p>
+            </div>
+        `;
+        resultBox.classList.add('result-visible', 'error');
     }
 
     function clearFields() {
         const inputs = document.querySelectorAll('input');
         inputs.forEach(input => input.value = '');
-        resultBox.classList.remove('result-visible');
+        resultBox.classList.remove('result-visible', 'error');
+        resultBox.innerHTML = '';
     }
 
     unitSelector.addEventListener('change', toggleUnits);

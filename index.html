@@ -4,19 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BMI Calculator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>BMI Calculator</h1>
+        <h1 class="bmi-heading">BMI Calculator</h1>
 
         <div class="bmi-units">
-            <label for="unit-selector">Select Units:</label>
             <select id="unit-selector">
                 <option value="metric">Metric Units</option>
                 <option value="us">US Units</option>
@@ -24,74 +20,56 @@
         </div>
 
         <div id="metric-units" class="bmi-column">
-            <label for="weight-metric">Weight (kg)</label>
-            <input type="number" id="weight-metric" min="0" step="0.1" placeholder="Kilograms">
-            <label for="height-metric">Height (cm)</label>
-            <input type="number" id="height-metric" min="0" placeholder="Centimeters">
-            <label for="workout">Workout</label>
-            <input type="number" id="workout" min="0" placeholder="Intensity">
+            <label for="weight-metric">Weight:</label>
+            <input type="number" id="weight-metric" placeholder="Kilograms">
+            
+            <label for="height-metric">Height:</label>
+            <input type="number" id="height-metric" placeholder="Centimeters">
         </div>
-        
+
         <div id="us-units" class="bmi-column" style="display: none;">
-            <label for="weight-us">Weight (lbs)</label>
-            <input type="number" id="weight-us" min="0" step="0.1" placeholder="Pounds">
-            <label for="height-us">Height (inches)</label>
-            <input type="number" id="height-us" min="0" placeholder="Inches">
-            <label for="workout">Workout</label>
-            <input type="number" id="workout" min="0" placeholder="Intensity">
+            <label for="weight-us">Weight:</label>
+            <input type="number" id="weight-us" placeholder="Pounds">
+            
+            <label for="height-us">Height:</label>
+            <input type="number" id="height-us" placeholder="Inches">
         </div>
 
         <div class="button-container">
-            <button class="Calculate">Calculate</button>
+            <button class="Calculate">Calculate BMI</button>
             <button class="Clear">Clear</button>
         </div>
 
         <div id="result-box" class="result-box"></div>
 
-        <h2>BMI Categories</h2>
-        <table>
-            <tr>
-                <th>Classification</th>
-                <th>BMI range (kg/m²)</th>
-            </tr>
-            <tr>
-                <td>Severe Thinness</td>
-                <td>&lt; 16</td>
-            </tr>
-            <tr>
-                <td>Moderate Thinness</td>
-                <td>16 - 17</td>
-            </tr>
-            <tr>
-                <td>Mild Thinness</td>
-                <td>17 - 18.5</td>
-            </tr>
-            <tr>
-                <td>Normal</td>
-                <td>18.5 - 25</td>
-            </tr>
-            <tr>
-                <td>Overweight</td>
-                <td>25 - 30</td>
-            </tr>
-            <tr>
-                <td>Obese Class I</td>
-                <td>30 - 35</td>
-            </tr>
-            <tr>
-                <td>Obese Class II</td>
-                <td>35 - 40</td>
-            </tr>
-            <tr>
-                <td>Obese Class III</td>
-                <td>&gt; 40</td>
-            </tr>
-        </table>
-    </div>
-    <div class="icons">
-        <i class="fa fa-medical"></i>
-        <i class="fa fa-bottle-water"></i>
-        <i class="fa-solid fa-dumbbell"></i>
+        <div class="bmi-table">
+            <table>
+                <tr>
+                    <td>Mild Thinness</td>
+                    <td>17 - 18.5</td>
+                </tr>
+                <tr>
+                    <td>Normal</td>
+                    <td>18.5 - 25</td>
+                </tr>
+                <tr>
+                    <td>Overweight</td>
+                    <td>25 - 30</td>
+                </tr>
+                <tr>
+                    <td>Obese Class I</td>
+                    <td>30 - 35</td>
+                </tr>
+                <tr>
+                    <td>Obese Class II</td>
+                    <td>35 - 40</td>
+                </tr>
+                <tr>
+                    <td>Obese Class III</td>
+                    <td>&gt; 40</td>
+                </tr>
+            </table>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

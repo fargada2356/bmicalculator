@@ -1,184 +1,295 @@
-* {
+/* CSS Custom Properties for better maintainability */
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --primary-color: #4CAF50;
+    --danger-color: #f44336;
+    --text-color: #ffffff;
+    --transition-speed: 0.3s;
+    --border-radius-lg: 24px;
+    --border-radius-md: 16px;
+    --border-radius-sm: 12px;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 2.5rem;
+}
+
+/* Base Reset with more specific rules */
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
 }
 
+/* Improved Body Styling */
 body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
-    padding: 20px;
+    padding: clamp(20px, 5vw, 40px);
+    background: var(--primary-gradient);
+    background-size: 200% 200%;
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: gradientMove 15s ease infinite;
+    line-height: 1.6;
 }
 
+/* Optimized Container */
 .container {
+    width: 100%;
     max-width: 800px;
-    margin: 0 auto;
+    padding: clamp(var(--spacing-md), 4vw, var(--spacing-xl));
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    padding: 2rem;
-    border-radius: 15px;
-    color: white;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
+    border-radius: var(--border-radius-lg);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transition: transform var(--transition-speed) ease;
 }
 
-h1 {
+.container:hover {
+    transform: translateY(-5px);
+}
+
+/* Enhanced Typography */
+.bmi-heading {
     text-align: center;
-    margin-bottom: 2rem;
-    color: white;
+    margin-bottom: clamp(var(--spacing-md), 4vw, var(--spacing-xl));
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    line-height: 1.2;
 }
 
+/* Improved Form Elements */
 .bmi-units {
-    margin-bottom: 1rem;
     text-align: right;
-}
-
-select, input, button {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    margin: 5px 0;
+    margin-bottom: var(--spacing-md);
 }
 
 .bmi-column {
+    margin-bottom: var(--spacing-md);
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 2rem;
+    gap: var(--spacing-xs);
 }
 
+.bmi-column label {
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+}
+
+select,
+input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius-sm);
+    background: rgba(255, 255, 255, 0.95);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all var(--transition-speed) ease;
+}
+
+select:hover,
+input:hover {
+    border-color: rgba(76, 175, 80, 0.5);
+}
+
+select:focus,
+input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Enhanced Buttons */
 .button-container {
     display: flex;
-    gap: 1rem;
+    gap: var(--spacing-sm);
     justify-content: center;
-    margin: 2rem 0;
+    margin: var(--spacing-lg) 0;
 }
 
 button {
-    padding: 10px 30px;
-    cursor: pointer;
+    padding: 14px 35px;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-size: 1rem;
     font-weight: 500;
-    transition: transform 0.2s;
-}
-
-button:hover {
-    transform: scale(1.05);
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    font-family: inherit;
 }
 
 .Calculate {
-    background: #4CAF50;
-    color: white;
+    background: linear-gradient(45deg, var(--primary-color), #45a049);
+    color: var(--text-color);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
 }
 
 .Clear {
-    background: #f44336;
-    color: white;
+    background: linear-gradient(45deg, var(--danger-color), #e53935);
+    color: var(--text-color);
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
 }
 
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Improved Result Box */
 .result-box {
-    padding: 20px;
-    margin: 2rem 0;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
     display: none;
+    padding: var(--spacing-xl);
+    margin: var(--spacing-lg) 0;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--border-radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.result-visible {
+.result-box.result-visible {
     display: block;
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.result-box h3 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.result-box p {
+    margin-bottom: var(--spacing-xs);
+}
+
+.category-details {
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.details-section {
+    margin-top: var(--spacing-sm);
+}
+
+/* Enhanced Table */
+.bmi-table {
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: var(--border-radius-md);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 table {
     width: 100%;
-    border-collapse: collapse;
-    margin: 2rem 0;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
-th, td {
-    padding: 15px;
-    text-align: left;
+td {
+    padding: 14px 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color var(--transition-speed) ease;
 }
 
-th {
-    background: rgba(255, 255, 255, 0.2);
+tr:last-child td {
+    border-bottom: none;
 }
 
-.recommendation {
-margin-top: 20px;
-padding: 20px;
-background: rgba(255, 255, 255, 0.15);
-border-radius: 12px;
-box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-backdrop-filter: blur(5px);
-border: 1px solid rgba(255, 255, 255, 0.2);
-gap: 20px;
+tr:hover td {
+    background: rgba(255, 255, 255, 0.05);
 }
 
-.recommendation h4 {
-margin-bottom: 15px;
-font-size: 1.2em;
-color: #4CAF50;
-text-transform: uppercase;
-letter-spacing: 1px;
-gap: 20px;
+/* Error Message Styling */
+.error-message {
+    color: var(--danger-color);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
 }
 
-.workout-schedule {
-margin-top: 15px;
-padding: 15px;
-background: rgba(76, 175, 80, 0.1);
-border-radius: 8px;
-border-left: 4px solid #4CAF50;
+/* Animations */
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
-.workout-schedule h5 {
-color: #4CAF50;
-margin-bottom: 10px;
-font-size: 1em;
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
 }
 
-.schedule-grid {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-gap: 15px;
-margin-top: 10px;
-}
-
-.schedule-day {
-background: rgba(255, 255, 255, 0.1);
-padding: 10px;
-border-radius: 6px;
-border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.schedule-day h6 {
-color: #4CAF50;
-margin-bottom: 5px;
-font-size: 0.9em;
-
-}
-
-.fa-bottle-water {
-    color: rgb(118, 118, 228);
-    font-size: 1.2em;
-}
-
-.fa-notes-medical {
-    color: #4CAF50;
-}
-
-.fa-dumbbell {
-    color: black;
-}
-
+/* Responsive Design */
 @media (max-width: 768px) {
-    .container {
-        padding: 1rem;
+    .button-container {
+        flex-direction: column;
     }
     
-    h1 {
-        font-size: 1.5rem;
+    button {
+        width: 100%;
+        padding: 16px 20px;
+    }
+    
+    td {
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+    
+    .result-box {
+        padding: var(--spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        border-radius: var(--border-radius-md);
+        padding: var(--spacing-md);
+    }
+    
+    .bmi-heading {
+        font-size: 1.8rem;
+    }
+    
+    .bmi-table {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+    .container,
+    button,
+    select,
+    input {
+        transition: none;
+    }
+    
+    .container:hover {
+        transform: none;
+    }
+    
+    body {
+        animation: none;
     }
 }
